@@ -1,0 +1,21 @@
+table,tr,td,th{
+    border:1px black solid;
+    padding:1rem;
+}
+table{
+    border-collapse: collapse;
+}
+.hide{
+    display: none;
+}
+.submit{
+    width:20%;
+    background-color: red;
+    margin-top:1rem;
+}
+.show{
+    display: flex;
+    flex-direction: column;
+    width:50%;
+    margin:1rem;
+}
