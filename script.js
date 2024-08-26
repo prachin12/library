@@ -4,8 +4,8 @@ let submit=document.querySelector(".submit");
 let library=document.querySelector("#table")
 let mybook=[];
 let n=0;
-let sn=1;
-let i=0;
+let sn=0;
+let i;
 
 function Book(sn,title,author,pageno,status){
     this.sn=sn;
@@ -22,34 +22,36 @@ addbk.addEventListener('click',()=>{
     toaddbk.classList.add("show");
     toaddbk.classList.remove("hide");
 
+    //submitting
 
     submit.addEventListener('click',()=>{
-        console.log('clicked');
+        sn=sn+1;
         let book = new Book(sn,toaddbk.title.value, toaddbk.author.value, toaddbk.pages.value, toaddbk.status.value);
         mybook.push(book);
-        let row=document.createElement("tr");
-        
-        let length=Object.keys(mybook[n]).length;
 
-        console.log(mybook[0]);
+        let length= Object.keys(mybook[n]).length;
+console.log(length);
+        let detail;
+        let row=document.createElement("tr");
+
         Object.entries(mybook[n]).forEach(([key, value]) => {
             if(i!=length){
-                let detail=document.createElement("td");
+                detail=document.createElement("td");
                 detail.innerText=value;
-                i++;
                 row.appendChild(detail);
+                i++;
             }
         });
-        library.appendChild(row);
-        console.log(row);
-        i=0;
-        
-        event.preventDefault();
 
+        library.appendChild(row);
+        event.preventDefault();
         toaddbk.classList.add("hide");
-        toaddbk.classList.remove("show");
-        sn++;
+        toaddbk.classList.remove("show"); 
     })
+    n=n+1;
+    i=0;
+   
+    
 })
 
 
