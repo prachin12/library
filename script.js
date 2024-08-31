@@ -3,6 +3,7 @@ let addbk=document.querySelector(".addbk");
 let toaddbk=document.querySelector(".toaddbk");
 let submit=document.querySelector(".submit");
 let library=document.querySelector("#table");
+
 let statusadd=0;
 let mybook=[];
 let sn=0;
@@ -10,6 +11,7 @@ let i;
 let num=0;
 let count=0;
 let a=0;
+let flagg=1;
 
 //constructor
 function Book(sn,title,author,pageno,status){
@@ -18,7 +20,6 @@ function Book(sn,title,author,pageno,status){
     this.author=author;
     this.page=pageno;
     this.status=status;
-    
 }
 //showing form
 addbk.addEventListener('click',e=>{
@@ -36,16 +37,23 @@ submit.addEventListener('click',e=>{
         event.preventDefault();
     }
     else{
-
-    sn=sn+1;
-
+        
+        if (flagg==1){
+            sn=sn+1;
+        }
+        else if(flagg>1){
+            for(let i=1;i<flagg-1;i++){
+                sn-=1;
+            }
+            flagg=1;
+        }
     //adding to values constructor
     let book = new Book(sn,toaddbk.title.value, toaddbk.author.value, toaddbk.pages.value, toaddbk.status.value);
     mybook.push(book);
 
 
     //calculating the no of datas in the object
-    let length= Object.keys(mybook[num]).length;
+    
     let detail;//to create element td
     let row=document.createElement("tr"); //tr create element
     Object.entries(mybook[num]).forEach(([key, value]) => {
@@ -69,6 +77,7 @@ submit.addEventListener('click',e=>{
     let del=document.createElement("button")
     del.innerText="delete";
     del.className="delete";
+    row.className="rows";
     row.id=sn;
     detail.appendChild(del);
     row.appendChild(detail);
@@ -114,9 +123,30 @@ library.addEventListener('click', e => {
 
     if (e.target.classList.contains('delete')){
         let index=parseInt(e.target.parentElement.parentElement.id);
-        console.log(mybook[index-1]);
+        delete mybook[index-1];
+        e.target.parentElement.parentElement.remove();
+        updateSn(index);
     }
 });
 
+//updating the sn values
+function updateSn(index){
+    let row=document.querySelectorAll(".rows");
+    row.forEach(row=>{
+        let current=parseInt(row.firstChild.innerText);
+        if(current>index){
+                    current-=1;
+                    row.id=current;
+                    row.firstChild.innerText=current;
+        }
+    })
+    mybook.forEach(book=>{
+
+        if (book.sn > index) {
+            book.sn -= 1; 
+        }
+    })
+    flagg+=1;
+}
 
 
