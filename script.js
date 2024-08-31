@@ -3,8 +3,6 @@ let addbk=document.querySelector(".addbk");
 let toaddbk=document.querySelector(".toaddbk");
 let submit=document.querySelector(".submit");
 let library=document.querySelector("#table");
-
-let statusadd=0;
 let mybook=[];
 let sn=0;
 let i;
@@ -12,6 +10,7 @@ let num=0;
 let count=0;
 let a=0;
 let flagg=1;
+let checker=1;
 
 //constructor
 function Book(sn,title,author,pageno,status){
@@ -56,7 +55,7 @@ submit.addEventListener('click',e=>{
     
     let detail;//to create element td
     let row=document.createElement("tr"); //tr create element
-    Object.entries(mybook[num]).forEach(([key, value]) => {
+    Object.entries(book).forEach(([key, value]) => {
             //adding a logic so that status is a button
             detail=document.createElement("td");
             if(a==4){
@@ -95,38 +94,50 @@ submit.addEventListener('click',e=>{
     toaddbk.classList.remove("show"); 
 
     //to keep track of the array data it helps to itterate through every object stored in the array
+
+    if(checker==0){
+        num-=1;
+        checker=1;
+    }
+    else{
     num=num+1;
+    }
     a=0;
-    statusadd=1;
-    
+
 }
 }) 
 
 //changing the status of read and unread in the table, also updating the value in the array
 library.addEventListener('click', e => {
    
-    
+    if (e.target.classList.contains('delete')){
+        let index=parseInt(e.target.parentElement.parentElement.id);
+        mybook.splice(index-1,1);
+        e.target.parentElement.parentElement.remove();
+        updateSn(index);
+    }
+
     if (e.target.classList.contains('changestatus')) {
         // You can add additional logic here, such as toggling the status
         // For example, toggling between 'Read' and 'Unread'
+        
         let index=parseInt(e.target.parentElement.parentElement.id);
+        console.log(index);
+        console.log(mybook[index-1].status);
+
         if (e.target.innerText === 'Read') {
             e.target.innerText = 'Unread';
-            console.log(mybook[index-1].status);
             mybook[index-1].status="Unread";
+            console.log(mybook[index-1].status);
         } 
         else {
             e.target.innerText = 'Read';
             mybook[index-1].status="Read";
+            console.log(mybook[index-1].status);
         }
     }
 
-    if (e.target.classList.contains('delete')){
-        let index=parseInt(e.target.parentElement.parentElement.id);
-        delete mybook[index-1];
-        e.target.parentElement.parentElement.remove();
-        updateSn(index);
-    }
+   
 });
 
 //updating the sn values
@@ -147,6 +158,8 @@ function updateSn(index){
         }
     })
     flagg+=1;
+    checker=0;
+    
 }
 
 
